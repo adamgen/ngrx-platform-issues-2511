@@ -44,5 +44,7 @@ export class AppComponent {
     this.activatedRoute.params.subscribe(data => {
       console.log('from activatedRoute', data);
     });
+
+    this.paramsFromActivatedRoute$ = this.activatedRoute.params;
   }
 }
