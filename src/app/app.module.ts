@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
 import { EffectsModule } from '@ngrx/effects';
 import { RouterEffectsService } from './router-effects.service';
 import { OutletComponent } from './outlet/outlet.component';
@@ -17,7 +17,9 @@ import { OutletComponent } from './outlet/outlet.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot({}, {}),
+    StoreModule.forRoot({
+      router: routerReducer,
+    }, {}),
     StoreRouterConnectingModule.forRoot({
       stateKey: 'router',
       routerState: 1,
