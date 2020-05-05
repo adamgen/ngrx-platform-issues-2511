@@ -1,5 +1,5 @@
 import { Store, createFeatureSelector, select } from '@ngrx/store';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as fromRouter from '@ngrx/router-store';
 import { tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
@@ -25,7 +25,7 @@ Url params from ActivatedRoute: {{paramsFromActivatedRoute$ | async | json}} <br
 `, // Outputs "Url param is:"
   styles: ['']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'angular-examples';
   paramsFromNGRX$;
   paramsFromActivatedRoute$;
@@ -38,7 +38,7 @@ export class AppComponent {
   ngOnInit() {
     this.paramsFromNGRX$ = this.store.pipe(
       select(selectRouteParams),
-      tap(fromPipeTap => console.log({fromPipeTap})), // logs undefined
+      tap(fromPipeTap => console.log({ fromPipeTap })), // logs undefined
     );
 
     this.activatedRoute.params.subscribe(data => {
