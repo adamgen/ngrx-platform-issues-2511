@@ -22,6 +22,7 @@ export const {
 })
 export class AppComponent {
   title = 'angular-examples';
+  param;
   constructor(
     private store: Store,
   ) {
@@ -29,8 +30,6 @@ export class AppComponent {
 
   ngOnInit() {
     // this.store.pipe(select(selectRouteParam('id'))).subscribe(data => {
-    this.store.pipe(select(selectRouteParams)).subscribe(data => {
-      console.log('from component', data);
-    });
+    this.param = this.store.pipe(select(selectRouteParams));
   }
 }
