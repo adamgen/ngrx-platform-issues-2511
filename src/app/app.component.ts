@@ -1,6 +1,8 @@
 import { Store, createFeatureSelector, select } from '@ngrx/store';
 import { Component } from '@angular/core';
 import * as fromRouter from '@ngrx/router-store';
+import { tap } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 export const selectRouter = createFeatureSelector<any, fromRouter.RouterReducerState<any>>('router');
 
@@ -17,19 +19,30 @@ export const {
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  template: `
+Url params from NGRX: {{paramsFromNGRX$ | async | json}} <br>
+Url params from ActivatedRoute: {{paramsFromActivatedRoute$ | async | json}} <br>
+`, // Outputs "Url param is:"
+  styles: ['']
 })
 export class AppComponent {
   title = 'angular-examples';
-  param;
+  paramsFromNGRX$;
+  paramsFromActivatedRoute$;
   constructor(
     private store: Store,
+    private activatedRoute: ActivatedRoute,
   ) {
   }
 
   ngOnInit() {
-    // this.store.pipe(select(selectRouteParam('id'))).subscribe(data => {
-    this.param = this.store.pipe(select(selectRouteParams));
+    this.paramsFromNGRX$ = this.store.pipe(
+      select(selectRouteParams),
+      tap(fromPipeTap => console.log({fromPipeTap})), // logs undefined
+    );
+
+    this.activatedRoute.params.subscribe(data => {
+      console.log('from activatedRoute', data);
+    });
   }
 }

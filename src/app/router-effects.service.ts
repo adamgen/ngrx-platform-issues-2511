@@ -26,7 +26,7 @@ export class RouterEffectsService {
     concatMap(action => of(action).pipe(
       withLatestFrom(this.store.pipe(select(selectRouteParams))),
     )),
-    tap((id) => console.log('from effect', id)),
+    // tap((id) => console.log('from effect', id)),
   ), { dispatch: false });
 
   constructor(
