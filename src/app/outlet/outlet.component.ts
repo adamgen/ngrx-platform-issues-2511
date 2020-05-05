@@ -2,7 +2,7 @@ import { Store, createFeatureSelector, select } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import * as fromRouter from '@ngrx/router-store';
 import { tap, filter, map, catchError } from 'rxjs/operators';
-import { ActivatedRoute, Router, RoutesRecognized } from '@angular/router';
+import { Router, RoutesRecognized } from '@angular/router';
 import { of } from 'rxjs';
 
 export const selectRouter = createFeatureSelector<any, fromRouter.RouterReducerState<any>>('router');
@@ -25,13 +25,10 @@ export const {
 Url params from NGRX: {{paramsFromNGRX$ | async | json}} <br>
 Url params from Router: {{paramsFromRouter$ | async | json}} <br>
 </pre>
-
-<h1>Outlet</h1>
-<router-outlet></router-outlet>
 `,
   styles: ['']
 })
-export class AppComponent implements OnInit {
+export class OutletComponent implements OnInit {
   title = 'angular-examples';
   paramsFromNGRX$;
   paramsFromRouter$;
@@ -54,7 +51,7 @@ export class AppComponent implements OnInit {
     this.paramsFromRouter$ = this.router.events
       .pipe(
         filter<RoutesRecognized>(event => event instanceof RoutesRecognized),
-        map(event => event.state.root.firstChild.params),
+        map(event => event.state.root.params),
         tap(fromRouter => console.log(fromRouter)),
       );
 

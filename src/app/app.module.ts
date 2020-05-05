@@ -7,16 +7,21 @@ import { StoreModule } from '@ngrx/store';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { EffectsModule } from '@ngrx/effects';
 import { RouterEffectsService } from './router-effects.service';
+import { OutletComponent } from './outlet/outlet.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    OutletComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     StoreModule.forRoot({}, {}),
-    StoreRouterConnectingModule.forRoot(),
+    StoreRouterConnectingModule.forRoot({
+      stateKey: 'router',
+      routerState: 1,
+    }),
     EffectsModule.forRoot([RouterEffectsService])
   ],
   providers: [],
