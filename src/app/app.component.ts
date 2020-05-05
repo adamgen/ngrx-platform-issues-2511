@@ -1,8 +1,8 @@
 import { Store, createFeatureSelector, select } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import * as fromRouter from '@ngrx/router-store';
-import { tap } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { tap, filter, map } from 'rxjs/operators';
+import { ActivatedRoute, Router, RoutesRecognized } from '@angular/router';
 
 export const selectRouter = createFeatureSelector<any, fromRouter.RouterReducerState<any>>('router');
 
@@ -20,18 +20,20 @@ export const {
 @Component({
   selector: 'app-root',
   template: `
+<pre>
 Url params from NGRX: {{paramsFromNGRX$ | async | json}} <br>
-Url params from ActivatedRoute: {{paramsFromActivatedRoute$ | async | json}} <br>
+Url params from Router: {{paramsFromRouter$ | async | json}} <br>
+</pre>
 `, // Outputs "Url param is:"
   styles: ['']
 })
 export class AppComponent implements OnInit {
   title = 'angular-examples';
   paramsFromNGRX$;
-  paramsFromActivatedRoute$;
+  paramsFromRouter$;
   constructor(
     private store: Store,
-    private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) {
   }
 
@@ -41,10 +43,12 @@ export class AppComponent implements OnInit {
       tap(fromPipeTap => console.log({ fromPipeTap })), // logs undefined
     );
 
-    this.activatedRoute.params.subscribe(data => {
-      console.log('from activatedRoute', data);
-    });
+    this.paramsFromRouter$ = this.router.events
+      .pipe(
+        filter<RoutesRecognized>(event => event instanceof RoutesRecognized),
+        map(event => event.state.root.firstChild.params),
+        tap(fromRouter => console.log(fromRouter)),
+      );
 
-    this.paramsFromActivatedRoute$ = this.activatedRoute.params;
   }
 }
